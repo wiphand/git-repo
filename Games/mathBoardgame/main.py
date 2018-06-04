@@ -111,13 +111,13 @@ while True:
                         #hist1=random.choice(historyjki1) # losuje historyjki
                         #hist2=random.choice(historyjki2)
                         numer=numer_pytania(text1) #sprawdzam numer pytania
-                        text_odpowiedzi = [
-                            odp_a(numer), #dopasowuje odpowiedź a do konkretnego pytania
-                            odp_b(numer), #dopasowuje odpowiedź b do konkretnego pytania
-                            odp_c(numer), #dopasowuje odpowiedź c do konkretnego pytania
-                            odp_d(numer) #dopasowuje odpowiedź d do konkretnego pytania
+                        gameState.pytanie = [
+                            [odp_a(numer),320,370], #dopasowuje odpowiedź a do konkretnego pytania
+                            [odp_b(numer),320,410], #dopasowuje odpowiedź b do konkretnego pytania
+                            [odp_c(numer),530,370], #dopasowuje odpowiedź c do konkretnego pytania
+                            [odp_d(numer),530,410] #dopasowuje odpowiedź d do konkretnego pytania
                         ]
-                        poprawna=poprawne(numer) #sprawdza która odp jest poprawna
+                        gameState.pop_odp=poprawne(numer) #sprawdza która odp jest poprawna
                     if pozycja in wsp_historyjki1:
                         hist1=random.choice(historyjki1)
                         stanGry = 2
@@ -131,19 +131,19 @@ while True:
 
             if stanGry == 1:
                 if event.key == pygame.K_o:
-                    gameState.odpowiedz = 0
+                    gameState.userInput = 0
                 #TODO classa odczytujaca poprawne odpowiedzi z bazy pytań
-                if event.key == pygame.K_a and "a" == poprawna or event.key == pygame.K_b and "b" == poprawna  or event.key == pygame.K_c and "c" == poprawna or event.key == pygame.K_d and "d" == poprawna:
+                if event.key == pygame.K_a and "a" == gameState.pop_odp or event.key == pygame.K_b and "b" == gameState.pop_odp  or event.key == pygame.K_c and "c" == gameState.pop_odp or event.key == pygame.K_d and "d" == gameState.pop_odp:
                 #wywołuje przyciskiem a
                 
                         #screen.blit(poprawna_odp,(220,200)) # wyswietla info że odp poprawna
-                    gameState.odpowiedz = 1
+                    gameState.userInput = 1
                 else:
                         #screen.blit(zla_odp,(220,200))# wyswietla info że odp zla
-                    gameState.odpowiedz = -1
+                    gameState.userInput = -1
 
-                if gameState.odpowiedz != 0: # != różne #jeżeli odp. została udzielona
-                    ectsy += gameState.odpowiedz # dodaj/odejmij punkty
+                if gameState.userInput != 0: # != różne #jeżeli odp. została udzielona
+                    ectsy += gameState.userInput # dodaj/odejmij punkty
                     stanGry = 0
         gameState.setStan(stanGry)
         gameState.setPozycja(pozycja)
@@ -159,12 +159,12 @@ while True:
         draw.w_text(text1,270,250)
 
         #TODO wyswietl texty odpowiedzi za pomoca clasy odpowiedzi
-        #for item in odpowiedz:
-         #   draw.w_text(item,320,370)
+        for item in gameState.pytanie:
+           draw.w_text(item[0],item[1],item[2])
         #TODO timer for question feedback
-        if gameState.odpowiedz == 1:
+        if gameState.userInput == 1:
             draw.w_okienko(0)
-        elif gameState.odpowiedz == -1:
+        elif gameState.userInput == -1:
             draw.w_okienko(1)
 
     #TODO stan gry dla kart szansy
